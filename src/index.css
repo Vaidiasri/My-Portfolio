@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -31,6 +32,20 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-heading: "Space Grotesk", system-ui, sans-serif;
+
+  --animate-scan: scan 2s linear infinite;
+
+  @keyframes scan {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 0 100%;
+    }
+  }
 }
 
 @utility container {
@@ -68,53 +83,106 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased overflow-x-hidden;
+    background-image:
+      radial-gradient(
+        circle at 50% 0%,
+        hsl(var(--primary) / 0.15),
+        transparent 60%
+      ),
+      radial-gradient(
+        circle at 0% 50%,
+        hsl(var(--secondary) / 0.2),
+        transparent 50%
+      );
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading tracking-tight;
+  }
 }
 
 :root {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 263.4 70% 50.4%;
+  /* Deep Space Palette */
+  --background: 230 25% 5%; /* #0a0c14 - Obsidian / Deep Space */
+  --foreground: 210 20% 98%; /* Starlight White */
+
+  --card: 230 20% 8%; /* Slightly lighter than bg */
+  --card-foreground: 210 20% 98%;
+
+  --popover: 230 20% 8%;
+  --popover-foreground: 210 20% 98%;
+
+  --primary: 250 80% 65%; /* Electric Violet */
   --primary-foreground: 210 20% 98%;
-  --secondary: 240 3.7% 15.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
-  --accent: 240 3.7% 15.9%;
-  --accent-foreground: 0 0% 98%;
+
+  --secondary: 190 80% 60%; /* Cyan / Nebula */
+  --secondary-foreground: 230 25% 5%;
+
+  --muted: 230 15% 15%;
+  --muted-foreground: 230 10% 60%;
+
+  --accent: 250 80% 65%;
+  --accent-foreground: 210 20% 98%;
+
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 0 0% 98%;
-  --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
-  --ring: 263.4 70% 50.4%;
+
+  --border: 230 15% 15%;
+  --input: 230 15% 15%;
+  --ring: 250 80% 65%;
+
   --radius: 0.5rem;
 }
 
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  overflow-x: hidden;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-/* Holographic / Glass Card */
-.holo-card {
+/* Glassmorphism Utilities */
+@utility glass {
   background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  backdrop-filter: blur(16px);
+  --webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.holo-card:hover {
-  background: rgba(255, 255, 255, 0.08); /* Brighter interaction */
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
+.glass-card {
+  @apply glass rounded-2xl transition-all duration-300;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 30px hsl(var(--primary) / 0.1);
+  transform: translateY(-2px);
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-primary-foreground to-gray-400;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
 }

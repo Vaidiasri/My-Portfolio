@@ -5,8 +5,8 @@ export const portfolioData = {
     tagline: "Building Digital Experiences",
     bio: "Innovative Full Stack Developer and Technical Consultant with a proven track record of optimizing UI performance by 80% and delivering scalable software solutions. I specialize in building high-performance, interactive web applications using React, TypeScript, and modern 3D technologies.",
     email: "vaibhavghildiyal2101@gmail.com",
-    github: "https://github.com",   // TODO: Update with real link
-    linkedin: "https://linkedin.com", // TODO: Update with real link
+    github: "https://github.com/Vaidiasri",
+    linkedin: "https://www.linkedin.com/in/vaibhav-ghildiyal-a2a9b8212/",
   },
   skills: [
     { name: "React", level: 90 },
@@ -29,6 +29,7 @@ export const portfolioData = {
       tech: ["Python", "TensorFlow", "MobileNet"],
       link: "https://github.com/Vaidiasri/lungs-detector.git",
       github: "https://github.com/Vaidiasri/lungs-detector.git",
+      image: "/project-lungs.jpg",
     },
     {
       title: "3D Apple MacBook Site",
@@ -36,6 +37,7 @@ export const portfolioData = {
       tech: ["React", "Three.js", "GSAP", "Tailwind"],
       link: "https://euphonious-eclair-188161.netlify.app/",
       github: "https://github.com/Vaidiasri/macbook.git",
+      image: "/project-macbook.jpg",
     },
     {
       title: "Typing Speed Tester",
@@ -43,6 +45,24 @@ export const portfolioData = {
       tech: ["HTML5", "CSS3", "JavaScript"],
       link: "https://dainty-marshmallow-9f5b06.netlify.app",
       github: "https://github.com/Vaidiasri/jsproject04.git",
+      image: "/project-typing.jpg",
+    },
+    {
+      title: "IQ - Technical Interview Platform",
+      description:
+        "A unified, next-gen platform for live technical assessments, solving 'tab-switching' fatigue. Features a sandboxed code engine (JS, Python, Java), real-time video/chat sync via Stream SDK, and a curated bank of 120+ LeetCode-style questions.",
+      tech: [
+        "React 19",
+        "TypeScript",
+        "TailwindCSS v4",
+        "TanStack Query",
+        "Node.js",
+        "MongoDB",
+        "Piston API",
+      ],
+      image: "/project-iq.jpg",
+      link: "https://iq-xzvb.onrender.com",
+      github: "https://github.com/Vaidiasri/iq",
     },
     {
       title: "Kanban Task Manager",
@@ -50,20 +70,28 @@ export const portfolioData = {
       tech: ["React", "Tailwind CSS", "Vite", "LocalStorage"],
       link: "https://magical-kringle-f50bb0.netlify.app/",
       github: "https://github.com/Vaidiasri/vite.git",
+      image: "/project-kanban.jpg",
     },
   ],
   experience: [
     {
       company: "Vigility",
-      role: "Technical Consultant (Projects: Digiice)",
+      role: "AI Solutions Architect & Full Stack Developer",
       period: "Jun 2025 - Present",
-      description: "Spearheaded the development of scalable frontend modules using React.js and Shadcn UI, achieving an 80% improvement in UI performance. Engineered a dynamic live dashboard for real-time data visualization and analytics. Collaborated closely with backend teams to design robust REST APIs, ensuring seamless service integration.",
+      description: "Spearheaded the development of a cutting-edge AI Reporting Agent using RAG (Retrieval-Augmented Generation) and LangChain, enabling automated, context-aware business insights. Architected the entire full-stack ecosystem, integrating Shadcn UI for a premium frontend experience and Python/FastAPI for robust backend processing. Achieved an 80% optimization in data retrieval speeds and significantly reduced manual reporting hours.",
+      technologies: ["LangChain", "RAG", "Python", "React", "Shadcn UI", "FastAPI"]
     },
     {
-      company: "YugYatra Retail Private Limited",
+      company: "YugYatra Retail",
       role: "Software Engineer Intern",
       period: "Apr 2025 - Jun 2025",
       description: "Designed and delivered scalable client-specific software solutions, reducing deployment turnaround time by 25%. Successfully implemented over 10 customized functionalities to meet strict deadlines. Optimized project workflows and fixed critical issues, boosting overall system reliability by 15%.",
+      technologies: ["React", "Node.js", "MongoDB", "Redux"]
     },
   ],
+  contact: {
+    email: "vaibhavghildiyal2101@gmail.com",
+    phone: "+91 9368209983",
+    location: "Noida, U.P.",
+  },
 };

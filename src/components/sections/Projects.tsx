@@ -1,127 +1,135 @@
 import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { portfolioData } from "@/data/portfolio";
-import { Github, ExternalLink, BookOpen } from "lucide-react";
+import { ExternalLink, Github } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Projects = () => {
-  const sectionRef = useRef(null);
+  // Force HMR update
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Entrance animation removed to ensure visibility
-    return () => {};
+    const ctx = gsap.context(() => {
+      const projects = document.querySelectorAll(".project-card");
+
+      projects.forEach((project) => {
+        gsap.from(project, {
+          scrollTrigger: {
+            trigger: project,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+          y: 100,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power2.out",
+        });
+
+        // Parallax image effect
+        const image = project.querySelector(".project-image");
+        if (image) {
+          gsap.to(image, {
+            scrollTrigger: {
+              trigger: project,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1,
+            },
+            y: -50,
+            ease: "none",
+          });
+        }
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section
-      id="projects"
-      ref={sectionRef}
-      className="py-24 relative z-10 w-full"
-    >
+    <section ref={containerRef} id="projects" className="py-20 relative">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl md:text-5xl font-bold mb-20 text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
-          Featured <span className="text-primary">Vol. Work</span>
+        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center font-heading">
+          Featured <span className="text-gradient">Work</span>
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div className="space-y-32">
           {portfolioData.projects.map((project, index) => (
             <div
               key={index}
-              className="flip-container group h-[350px] w-full perspective-1000 cursor-pointer"
+              className={`project-card flex flex-col ${
+                index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+              } gap-12 items-center`}
             >
-              <div
-                className="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-[preserve-3d] group-hover:rotate-y-180 shadow-2xl rounded-2xl"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                {/* Front Side (Cover) */}
-                <div
-                  className="flip-card-front absolute inset-0 w-full h-full bg-zinc-800 border border-white/20 rounded-2xl flex flex-col items-center justify-center p-8 bg-gradient-to-br from-zinc-800 to-zinc-900 shadow-[0_0_15px_rgba(0,0,0,0.5)]"
-                  style={{
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden",
-                  }}
-                >
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(124,58,237,0.1),transparent)]" />
-
-                  <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mb-6 ring-1 ring-primary/50 relative z-10">
-                    <BookOpen className="text-primary w-10 h-10" />
+              <div className="w-full md:w-3/5 group">
+                <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-zinc-900/5 aspect-video transform transition-transform duration-500 group-hover:scale-[1.02]">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <img
+                      src={(project as any).image || "/project-placeholder.jpg"}
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                    />
                   </div>
 
-                  <h3 className="text-3xl font-bold text-white mb-2 relative z-10">
-                    {project.title}
-                  </h3>
-                  <p className="text-gray-400 text-sm uppercase tracking-widest relative z-10">
-                    Project Vol. 0{index + 1}
-                  </p>
+                  <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/20 to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none mix-blend-overlay" />
+                </div>
+              </div>
+
+              <div className="w-full md:w-2/5 md:py-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-primary font-bold tracking-wider text-xs uppercase">
+                    0{index + 1}
+                  </span>
+                  <div className="h-px bg-primary/50 w-12" />
                 </div>
 
-                {/* Back Side (Details) */}
-                <div
-                  className="flip-card-back absolute inset-0 w-full h-full bg-zinc-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 flex flex-col shadow-[inset_0_0_50px_rgba(0,0,0,0.5)]"
-                  style={{
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden",
-                    transform: "rotateY(180deg)",
-                  }}
-                >
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-purple-500 shadow-[0_0_10px_rgba(124,58,237,0.5)]" />
+                <h3 className="text-3xl font-bold mb-4 text-white group-hover:text-primary transition-colors">
+                  {project.title}
+                </h3>
 
-                  {/* Scrollable Content */}
-                  <div
-                    className="flex-1 overflow-y-auto pr-2 custom-scrollbar text-left relative z-10"
-                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-                  >
-                    <style>{`
-                      .custom-scrollbar::-webkit-scrollbar {
-                        display: none; 
-                      }
-                    `}</style>
+                <p className="text-muted-foreground mb-6 leading-relaxed">
+                  {project.description}
+                </p>
 
-                    <h3 className="text-xl font-bold mb-3 border-b border-white/10 pb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-                      {project.title}
-                    </h3>
-
-                    <p className="text-gray-300 leading-relaxed mb-4 font-light text-sm tracking-wide">
-                      {project.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tech.map((t, i) => (
-                        <span
-                          key={i}
-                          className="px-2 py-1 bg-primary/10 border border-primary/30 text-primary-foreground text-[10px] font-bold rounded-full uppercase tracking-wider shadow-[0_0_10px_rgba(124,58,237,0.2)]"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Fixed Footer Buttons */}
-                  <div className="flex gap-3 relative z-10 mt-3 pt-3 border-t border-white/10 shrink-0">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 py-2 bg-white/5 border border-white/10 text-white rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-white/10 hover:border-white/30 transition-all text-xs group/btn"
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {project.tech.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 bg-white/5 border border-white/5 rounded-full text-xs font-medium text-white/80"
                     >
-                      <Github
-                        size={14}
-                        className="group-hover/btn:scale-110 transition-transform"
-                      />{" "}
-                      Code
-                    </a>
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-6">
+                  {project.link && (
                     <a
                       href={project.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 py-2 bg-primary text-white rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] transition-all text-xs group/btn"
+                      className="flex items-center gap-2 text-white hover:text-primary transition-colors text-sm font-bold tracking-wide uppercase group/link"
                     >
+                      Live Demo{" "}
                       <ExternalLink
-                        size={14}
-                        className="group-hover/btn:scale-110 transition-transform"
-                      />{" "}
-                      Demo
+                        size={16}
+                        className="group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 transition-transform"
+                      />
                     </a>
-                  </div>
+                  )}
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-white hover:text-primary transition-colors text-sm font-bold tracking-wide uppercase"
+                    >
+                      Github <Github size={16} />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
