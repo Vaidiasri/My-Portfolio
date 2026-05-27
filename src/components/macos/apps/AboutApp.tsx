@@ -11,7 +11,7 @@ const tabs: { id: Tab; Icon: React.ComponentType<{ size?: number; className?: st
 ];
 
 const stats = [
-  { value: "04+", label: "Years Experience" },
+  { value: "01+", label: "Years Experience" },
   { value: "20+", label: "Projects Delivered" },
   { value: "2", label: "Active Clients" },
   { value: "∞", label: "Lines of Code" },

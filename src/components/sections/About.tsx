@@ -6,7 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 
 const stats = [
-  { value: "04+", label: "Years Experience" },
+  { value: "01+", label: "Years Experience" },
   { value: "20+", label: "Projects Delivered" },
   { value: "2", label: "Active Clients" },
 ];
