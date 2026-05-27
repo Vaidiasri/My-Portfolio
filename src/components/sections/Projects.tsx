@@ -1,137 +1,155 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { portfolioData } from "@/data/portfolio";
-import { ExternalLink, Github } from "lucide-react";
+import { ArrowUpRight, Github } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Projects = () => {
-  // Force HMR update
-  const containerRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const [expanded, setExpanded] = useState<number | null>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const projects = document.querySelectorAll(".project-card");
-
-      projects.forEach((project) => {
-        gsap.from(project, {
-          scrollTrigger: {
-            trigger: project,
-            start: "top 80%",
-            end: "bottom 20%",
-            toggleActions: "play none none reverse",
-          },
-          y: 100,
-          opacity: 0,
-          duration: 0.8,
-          ease: "power2.out",
-        });
-
-        // Parallax image effect
-        const image = project.querySelector(".project-image");
-        if (image) {
-          gsap.to(image, {
-            scrollTrigger: {
-              trigger: project,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1,
-            },
-            y: -50,
-            ease: "none",
-          });
-        }
+      gsap.from(".project-row", {
+        scrollTrigger: { trigger: ref.current, start: "top 75%" },
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power3.out",
       });
-    }, containerRef);
-
+    }, ref);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={containerRef} id="projects" className="py-20 relative">
-      <div className="container mx-auto px-6">
-        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center font-heading">
-          Featured <span className="text-gradient">Work</span>
-        </h2>
+    <section id="projects" ref={ref} className="py-32 relative">
+      <div className="container mx-auto px-6 lg:px-8">
+        {/* Section header */}
+        <div className="flex items-center gap-6 mb-20">
+          <span className="font-mono text-[11px] text-white/25 tracking-[0.3em]">03</span>
+          <div className="h-px flex-1 bg-white/8" />
+          <span className="font-mono text-[10px] text-white/25 tracking-[0.4em] uppercase">Selected Work</span>
+        </div>
 
-        <div className="space-y-32">
-          {portfolioData.projects.map((project, index) => (
+        <div className="mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+          <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white font-heading leading-tight">
+            Engineered for{" "}
+            <span className="text-gradient">performance.</span>
+          </h2>
+          <a
+            href="https://github.com/Vaidiasri"
+            target="_blank"
+            className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-white/35 hover:text-white transition-colors"
+          >
+            All on GitHub <ArrowUpRight size={14} />
+          </a>
+        </div>
+
+        {/* Project List */}
+        <div className="border-t border-white/8">
+          {portfolioData.projects.map((project, i) => (
             <div
-              key={index}
-              className={`project-card flex flex-col ${
-                index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-              } gap-12 items-center`}
+              key={i}
+              className="project-row border-b border-white/8"
             >
-              <div className="w-full md:w-3/5 group">
-                <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl bg-zinc-900/5 aspect-video transform transition-transform duration-500 group-hover:scale-[1.02]">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <img
-                      src={(project as any).image || "/project-placeholder.jpg"}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100"
-                    />
+              <button
+                className="w-full text-left group"
+                onClick={() => setExpanded(expanded === i ? null : i)}
+              >
+                <div className="py-6 flex items-center gap-6 lg:gap-10">
+                  {/* Number */}
+                  <span className="font-mono text-[11px] text-white/20 tracking-[0.3em] shrink-0">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+
+                  {/* Title */}
+                  <h3 className="text-xl md:text-2xl font-black tracking-tight text-white group-hover:text-gradient transition-colors duration-300 flex-1 text-left font-heading">
+                    {project.title}
+                  </h3>
+
+                  {/* Tags (hidden on mobile) */}
+                  <div className="hidden lg:flex items-center gap-2 shrink-0">
+                    {project.tech.slice(0, 3).map((tech) => (
+                      <span
+                        key={tech}
+                        className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/25 px-2.5 py-1 border border-white/8 rounded-full"
+                      >
+                        {tech}
+                      </span>
+                    ))}
                   </div>
 
-                  <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/20 to-transparent opacity-60" />
-                  <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none mix-blend-overlay" />
+                  {/* Arrow */}
+                  <ArrowUpRight
+                    size={18}
+                    className={`shrink-0 text-white/20 transition-all duration-300 ${
+                      expanded === i
+                        ? "rotate-90 text-primary"
+                        : "group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white/60"
+                    }`}
+                  />
                 </div>
-              </div>
+              </button>
 
-              <div className="w-full md:w-2/5 md:py-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-primary font-bold tracking-wider text-xs uppercase">
-                    0{index + 1}
-                  </span>
-                  <div className="h-px bg-primary/50 w-12" />
+              {/* Expanded Content */}
+              {expanded === i && (
+                <div className="pb-8 pl-12 lg:pl-20 pr-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* Description */}
+                  <div className="lg:col-span-2">
+                    {project.image && (
+                      <div className="mb-6 rounded-2xl overflow-hidden border border-white/5 aspect-[16/9]">
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="w-full h-full object-cover opacity-70"
+                        />
+                      </div>
+                    )}
+                    <p className="text-white/45 text-sm leading-relaxed">{project.description}</p>
+                  </div>
+
+                  {/* Links & Tags */}
+                  <div className="flex flex-col gap-6">
+                    <div>
+                      <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/20 mb-3">Tech Stack</p>
+                      <div className="flex flex-wrap gap-2">
+                        {project.tech.map((tech) => (
+                          <span
+                            key={tech}
+                            className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-3 py-1.5 border border-white/8 rounded-lg"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                      {project.link && (
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-white hover:text-primary transition-colors"
+                        >
+                          Live Demo <ArrowUpRight size={13} />
+                        </a>
+                      )}
+                      {project.github && (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-white/35 hover:text-white transition-colors"
+                        >
+                          Source Code <Github size={13} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
                 </div>
-
-                <h3 className="text-3xl font-bold mb-4 text-white group-hover:text-primary transition-colors">
-                  {project.title}
-                </h3>
-
-                <p className="text-muted-foreground mb-6 leading-relaxed">
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {project.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 bg-white/5 border border-white/5 rounded-full text-xs font-medium text-white/80"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-6">
-                  {project.link && (
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-white hover:text-primary transition-colors text-sm font-bold tracking-wide uppercase group/link"
-                    >
-                      Live Demo{" "}
-                      <ExternalLink
-                        size={16}
-                        className="group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 transition-transform"
-                      />
-                    </a>
-                  )}
-                  {project.github && (
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-white hover:text-primary transition-colors text-sm font-bold tracking-wide uppercase"
-                    >
-                      Github <Github size={16} />
-                    </a>
-                  )}
-                </div>
-              </div>
+              )}
             </div>
           ))}
         </div>

@@ -1,254 +1,173 @@
-import { useRef, useState, type MouseEvent } from "react";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { useState } from "react";
 import { portfolioData } from "@/data/portfolio";
-import MagneticButton from "../ui/MagneticButton";
+import { ArrowUpRight, Mail, MapPin, Github, Linkedin, Send } from "lucide-react";
 
 const Contact = () => {
-  const formRef = useRef<any>(null);
-  const [hovered, setHovered] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSent, setIsSent] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate sending delay for better UX
+    setSending(true);
     setTimeout(() => {
       const subject = `Portfolio Contact from ${formData.name}`;
       const body = `Name: ${formData.name}%0AEmail: ${formData.email}%0A%0AMessage:%0A${formData.message}`;
-      const mailtoLink = `mailto:${portfolioData.contact.email}?subject=${encodeURIComponent(subject)}&body=${body}`;
-
-      window.location.href = mailtoLink;
-
-      setIsSubmitting(false);
-      setIsSent(true);
-
-      // Reset form after 5 seconds
+      window.location.href = `mailto:${portfolioData.contact.email}?subject=${encodeURIComponent(subject)}&body=${body}`;
+      setSending(false);
+      setSent(true);
       setTimeout(() => {
-        setIsSent(false);
+        setSent(false);
         setFormData({ name: "", email: "", message: "" });
       }, 5000);
-    }, 1000);
-  };
-
-  // Simple 3D tilt effect for the form
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (!formRef.current) return;
-
-    const rect = formRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const midX = rect.width / 2;
-    const midY = rect.height / 2;
-
-    // Limit rotation to avoid too much distortion
-    const rotateX = ((y - midY) / midY) * -5;
-    const rotateY = ((x - midX) / midX) * 5;
-
-    formRef.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  };
-
-  const handleMouseLeave = () => {
-    if (!formRef.current) return;
-    formRef.current.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+    }, 800);
   };
 
   return (
     <section id="contact" className="py-32 relative overflow-hidden">
-      {/* Background Gradients */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* Gradient bleed */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/8 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Contact Info */}
+      <div className="container mx-auto px-6 lg:px-8 relative z-10">
+        {/* Section header */}
+        <div className="flex items-center gap-6 mb-20">
+          <span className="font-mono text-[11px] text-white/25 tracking-[0.3em]">06</span>
+          <div className="h-px flex-1 bg-white/8" />
+          <span className="font-mono text-[10px] text-white/25 tracking-[0.4em] uppercase">Contact</span>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+          {/* Left: CTA */}
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-8 font-heading">
-              Let's <span className="text-gradient">Connect</span>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white font-heading leading-[0.9] mb-8">
+              Let's Build<br />
+              <span className="text-gradient">Together.</span>
             </h2>
-            <p className="text-muted-foreground text-lg mb-12 max-w-lg leading-relaxed">
-              Have a project in mind or just want to chat about the latest in
-              tech? I'm always open to discussing new opportunities and ideas.
+
+            <p className="text-white/40 text-base leading-relaxed mb-12 max-w-md">
+              Have a project in mind or want to discuss how we can drive measurable outcomes together? I'm always open to the right conversation.
             </p>
 
-            <div className="space-y-8">
+            {/* Contact info */}
+            <div className="space-y-6 mb-12">
               <a
                 href={`mailto:${portfolioData.contact.email}`}
-                className="flex items-center gap-6 group p-4 rounded-xl transition-all hover:bg-white/5 border border-transparent hover:border-white/10"
+                className="group flex items-center gap-4 text-white/40 hover:text-white transition-colors"
               >
-                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                  <Mail size={24} />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                    Email
-                  </h4>
-                  <p className="text-xl text-white font-medium">
-                    {portfolioData.contact.email}
-                  </p>
-                </div>
+                <span className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/10 transition-all">
+                  <Mail size={15} />
+                </span>
+                <span className="text-sm font-medium">{portfolioData.contact.email}</span>
+                <ArrowUpRight size={13} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
 
-              <div className="flex items-center gap-6 group p-4 rounded-xl transition-all hover:bg-white/5 border border-transparent hover:border-white/10">
-                <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
-                  <Phone size={24} />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                    Phone
-                  </h4>
-                  <p className="text-xl text-white font-medium">
-                    {portfolioData.contact.phone}
-                  </p>
-                </div>
+              <div className="flex items-center gap-4 text-white/40">
+                <span className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center">
+                  <MapPin size={15} />
+                </span>
+                <span className="text-sm font-medium">{portfolioData.contact.location}</span>
               </div>
+            </div>
 
-              <div className="flex items-center gap-6 group p-4 rounded-xl transition-all hover:bg-white/5 border border-transparent hover:border-white/10">
-                <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
-                  <MapPin size={24} />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                    Location
-                  </h4>
-                  <p className="text-xl text-white font-medium">
-                    {portfolioData.contact.location}
-                  </p>
-                </div>
-              </div>
+            {/* Social links */}
+            <div className="flex items-center gap-4">
+              <a
+                href={portfolioData.personal.github}
+                target="_blank"
+                className="group flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 hover:text-white transition-colors border border-white/10 rounded-full px-4 py-2 hover:border-white/30"
+              >
+                <Github size={13} /> GitHub
+              </a>
+              <a
+                href={portfolioData.personal.linkedin}
+                target="_blank"
+                className="group flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 hover:text-white transition-colors border border-white/10 rounded-full px-4 py-2 hover:border-white/30"
+              >
+                <Linkedin size={13} /> LinkedIn
+              </a>
             </div>
           </div>
 
-          {/* Holographic Form */}
-          <div
-            className="relative perspective-1000"
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-          >
-            {/* Glow behind form */}
-            <div className="absolute inset-0 bg-linear-to-tr from-primary to-purple-500 blur-2xl opacity-20 -z-10 rounded-3xl" />
-
-            {isSent ? (
-              <div
-                ref={formRef}
-                className="bg-black/40 backdrop-blur-xl border border-white/10 p-8 md:p-10 rounded-3xl shadow-2xl transition-transform duration-100 ease-out preserve-3d flex flex-col items-center justify-center min-h-[500px] text-center"
-              >
-                <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 mb-6 animate-in zoom-in spin-in-12">
-                  <Send size={40} />
+          {/* Right: Form */}
+          <div>
+            {sent ? (
+              <div className="h-full flex flex-col items-center justify-center gap-6 border border-white/8 rounded-3xl p-10 text-center min-h-[480px]">
+                <div className="w-16 h-16 rounded-full bg-green-500/15 border border-green-500/30 flex items-center justify-center">
+                  <Send size={24} className="text-green-400" />
                 </div>
-                <h3 className="text-3xl font-bold text-white mb-2">
-                  Message Prepared!
-                </h3>
-                <p className="text-muted-foreground max-w-xs">
-                  Opening your email client to send the message...
-                </p>
+                <div>
+                  <h3 className="text-2xl font-black text-white mb-2">Message Prepared!</h3>
+                  <p className="text-white/40 text-sm">Opening your email client...</p>
+                </div>
               </div>
             ) : (
               <form
-                ref={formRef}
-                className="bg-black/40 backdrop-blur-xl border border-white/10 p-8 md:p-10 rounded-3xl shadow-2xl transition-transform duration-100 ease-out preserve-3d"
                 onSubmit={handleSubmit}
+                className="border border-white/8 rounded-3xl p-8 lg:p-10 space-y-6 bg-white/[0.015]"
               >
-                <h3 className="text-2xl font-bold mb-6 text-white translate-z-10">
-                  Send a Message
-                </h3>
+                <h3 className="text-xl font-black text-white tracking-tight mb-2">Send a Message</h3>
 
-                <div className="space-y-6">
-                  <div className="translate-z-10">
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium text-muted-foreground mb-2 ml-1"
-                    >
-                      Name
+                {[
+                  { id: "name", label: "Your Name", type: "text", placeholder: "Vaibhav Ghildiyal" },
+                  { id: "email", label: "Email Address", type: "email", placeholder: "hello@yourcompany.com" },
+                ].map((field) => (
+                  <div key={field.id}>
+                    <label htmlFor={field.id} className="block text-[10px] font-black uppercase tracking-[0.25em] text-white/30 mb-2">
+                      {field.label}
                     </label>
                     <input
-                      type="text"
-                      id="name"
-                      value={formData.name}
+                      type={field.type}
+                      id={field.id}
+                      value={formData[field.id as keyof typeof formData]}
                       onChange={handleChange}
                       required
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-white/20"
-                      placeholder="Your Name"
+                      placeholder={field.placeholder}
+                      className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/15 focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 transition-all"
                     />
                   </div>
+                ))}
 
-                  <div className="translate-z-10">
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-muted-foreground mb-2 ml-1"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-white/20"
-                      placeholder="hello@example.com"
-                    />
-                  </div>
-
-                  <div className="translate-z-10">
-                    <label
-                      htmlFor="message"
-                      className="block text-sm font-medium text-muted-foreground mb-2 ml-1"
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      rows={4}
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-white/20 resize-none"
-                      placeholder="Your message here..."
-                    ></textarea>
-                  </div>
-
-                  <div className="pt-4 translate-z-10">
-                    <MagneticButton className="w-full">
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full bg-primary text-primary-foreground font-bold py-4 rounded-xl shadow-lg hover:bg-primary/90 transition-all flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
-                        onMouseEnter={() => setHovered(true)}
-                        onMouseLeave={() => setHovered(false)}
-                      >
-                        {isSubmitting ? (
-                          <span>Preparing...</span>
-                        ) : (
-                          <>
-                            <span>Send Message</span>
-                            <Send
-                              size={18}
-                              className={`transition-transform duration-300 ${!isSubmitting && hovered ? "translate-x-1 -translate-y-1" : ""}`}
-                            />
-                          </>
-                        )}
-                      </button>
-                    </MagneticButton>
-                  </div>
+                <div>
+                  <label htmlFor="message" className="block text-[10px] font-black uppercase tracking-[0.25em] text-white/30 mb-2">
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    rows={4}
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    placeholder="Tell me about your project..."
+                    className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/15 focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 transition-all resize-none"
+                  />
                 </div>
+
+                <button
+                  type="submit"
+                  disabled={sending}
+                  className="w-full py-4 bg-white text-black text-xs font-black tracking-[0.2em] uppercase rounded-xl hover:bg-primary hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {sending ? "Preparing..." : (
+                    <>Send Message <Send size={14} /></>
+                  )}
+                </button>
               </form>
             )}
           </div>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-24 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="font-mono text-[10px] text-white/15 tracking-[0.3em]">
+            © {new Date().getFullYear()} VAIBHAV GHILDIYAL
+          </p>
+          <p className="font-mono text-[10px] text-white/15 tracking-[0.2em]">
+            FULL STACK DEVELOPER · VIGILITY TECHNOLOGY PVT. LTD.
+          </p>
         </div>
       </div>
     </section>

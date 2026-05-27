@@ -1,30 +1,37 @@
-import Navbar from "./components/layout/Navbar";
-import Hero from "./components/sections/Hero";
-import About from "./components/sections/About";
-import Experience from "./components/sections/Experience";
-import Skills from "./components/sections/Skills";
-import Projects from "./components/sections/Projects";
-import Contact from "./components/sections/Contact";
+import { useState, useEffect } from "react";
+import BootScreen from "./components/macos/BootScreen";
+import Desktop from "./components/macos/Desktop";
+import MobilePortfolio from "./components/mobile/MobilePortfolio";
 
-import SmoothScroll from "./components/layout/SmoothScroll";
-import GlobalBackground from "./components/layout/GlobalBackground";
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return isMobile;
+}
 
 function App() {
-  return (
-    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/30">
-      <SmoothScroll />
-      <GlobalBackground />
-      {/* <CustomCursor /> */}
-      <Navbar />
-      <div className="relative z-10">
-        <Hero />
-        <About />
-        <Experience />
-        <Skills />
-        <Projects />
-        <Contact />
-      </div>
-    </div>
+  const [booted, setBooted] = useState(false);
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    if (isMobile) {
+      document.body.classList.remove("desktop-mode");
+    } else {
+      document.body.classList.add("desktop-mode");
+    }
+  }, [isMobile]);
+
+  if (isMobile) return <MobilePortfolio />;
+
+  return booted ? (
+    <Desktop />
+  ) : (
+    <BootScreen onComplete={() => setBooted(true)} />
   );
 }
 

@@ -1,130 +1,123 @@
 import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import MagneticButton from "../ui/MagneticButton";
+import { Menu, X } from "lucide-react";
+
+const navLinks = [
+  { num: "01", name: "About", href: "#about" },
+  { num: "02", name: "Expertise", href: "#expertise" },
+  { num: "03", name: "Work", href: "#projects" },
+  { num: "04", name: "Skills", href: "#skills" },
+  { num: "05", name: "Contact", href: "#contact" },
+];
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40);
+      for (const link of navLinks) {
+        const el = document.querySelector(link.href);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 120 && rect.bottom >= 120) {
+            setActive(link.href);
+            break;
+          }
+        }
+      }
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const navLinks = [
-    { name: "About", href: "#about" },
-    { name: "Experience", href: "#experience" },
-    { name: "Skills", href: "#skills" },
-    { name: "Projects", href: "#projects" },
-    { name: "Contact", href: "#contact" },
-  ];
-
   return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: "circOut" }}
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300 pointer-events-none",
-        scrolled ? "pt-4" : "pt-6",
-      )}
-    >
-      <div
-        className={cn(
-          "pointer-events-auto relative flex items-center justify-between px-6 py-3 rounded-full transition-all duration-500",
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-black/40 backdrop-blur-xl border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.5)] w-[90%] md:w-[60%]"
-            : "bg-transparent w-full container",
-        )}
+            ? "bg-background/90 backdrop-blur-2xl border-b border-white/5"
+            : "bg-transparent"
+        }`}
       >
-        <a
-          href="#"
-          className="text-xl font-bold font-heading tracking-tighter text-foreground relative z-10"
-        >
-          VG<span className="text-primary">.</span>
-        </a>
+        <div className="container mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <a
+            href="#"
+            className="text-sm font-black tracking-[0.3em] uppercase text-white"
+          >
+            VG
+            <span className="text-primary">.</span>
+          </a>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-1">
-          {navLinks.map((link) => (
-            <MagneticButton key={link.name} className="relative group">
+          {/* Desktop Links */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
               <a
+                key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative z-10"
+                className={`group flex items-center gap-2 transition-colors duration-200 ${
+                  active === link.href ? "text-white" : "text-white/40 hover:text-white/80"
+                }`}
               >
-                {link.name}
-                <span className="absolute left-1/2 bottom-0 w-0 h-0.5 bg-primary -translate-x-1/2 transition-all duration-300 group-hover:w-1/2 opacity-0 group-hover:opacity-100" />
+                <span className="text-[10px] font-mono tracking-widest">{link.num}</span>
+                <span className="text-xs font-bold tracking-[0.15em] uppercase">{link.name}</span>
               </a>
-            </MagneticButton>
-          ))}
+            ))}
+          </div>
 
-          <div className="w-px h-4 bg-white/10 mx-4" />
-
-          <MagneticButton>
+          {/* CTA */}
+          <div className="flex items-center gap-4">
             <a
-              href="/resume.pdf"
-              target="_blank"
-              className="px-5 py-2 text-xs font-bold uppercase tracking-wider bg-white text-black rounded-full hover:bg-gray-200 transition-colors"
+              href="mailto:vaibhavghildiyal2101@gmail.com"
+              className="hidden md:inline-flex items-center gap-2 px-5 py-2 text-[10px] font-black tracking-[0.2em] uppercase border border-white/15 rounded-full text-white hover:bg-white hover:text-black transition-all duration-300"
             >
-              Resume
+              Hire Me ↗
             </a>
-          </MagneticButton>
-        </div>
-
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-foreground relative z-10 p-2"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-
-        {/* Mobile Menu Overlay */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              className="absolute top-full left-0 right-0 mt-4 bg-[#0a0c14] border border-white/10 rounded-2xl p-6 flex flex-col items-center space-y-6 md:hidden shadow-2xl overflow-hidden"
+            <button
+              className="md:hidden text-white/60 hover:text-white transition-colors"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label="Toggle menu"
             >
-              <div className="absolute inset-0 bg-primary/5 blur-3xl rounded-full pointer-events-none" />
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </div>
+      </nav>
 
-              {navLinks.map((link, i) => (
-                <motion.a
-                  key={link.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.1 }}
-                  href={link.href}
-                  className="text-2xl font-heading font-medium text-foreground hover:text-primary transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.name}
-                </motion.a>
-              ))}
-
-              <motion.a
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 }}
-                href="/resume.pdf"
-                target="_blank"
-                className="px-8 py-3 bg-primary text-white rounded-full font-bold uppercase tracking-wider"
-                onClick={() => setIsOpen(false)}
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-background/98 backdrop-blur-2xl flex flex-col items-center justify-center gap-8"
+          >
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-4 text-white/50 hover:text-white transition-colors"
               >
-                Resume
-              </motion.a>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.nav>
+                <span className="font-mono text-xs tracking-widest">{link.num}</span>
+                <span className="text-3xl font-bold tracking-tight">{link.name}</span>
+              </a>
+            ))}
+            <a
+              href="mailto:vaibhavghildiyal2101@gmail.com"
+              className="mt-8 px-8 py-3 border border-white/20 rounded-full text-sm font-bold tracking-widest uppercase text-white"
+            >
+              Hire Me ↗
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

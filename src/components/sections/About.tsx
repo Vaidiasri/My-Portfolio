@@ -1,149 +1,106 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Code2, Globe, Cpu } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const stats = [
+  { value: "04+", label: "Years Experience" },
+  { value: "20+", label: "Projects Delivered" },
+  { value: "2", label: "Active Clients" },
+];
+
 const About = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".about-content", {
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse",
-        },
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.2,
-      });
-
-      gsap.from(".stat-card", {
-        scrollTrigger: {
-          trigger: ".stats-container",
-          start: "top 85%",
-        },
+      gsap.from(".about-reveal", {
+        scrollTrigger: { trigger: ref.current, start: "top 75%" },
         y: 40,
         opacity: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "back.out(1.7)",
+        duration: 1,
+        stagger: 0.15,
+        ease: "power3.out",
       });
-    }, containerRef);
-
+    }, ref);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section
-      ref={containerRef}
-      id="about"
-      className="py-32 relative overflow-hidden"
-    >
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-16">
-          {/* Visual Element - "Story" Image/Design */}
-          <div className="w-full lg:w-1/2 about-content">
-            <div className="relative group perspective-1000">
-              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-violet-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+    <section id="about" ref={ref} className="py-32 relative">
+      <div className="container mx-auto px-6 lg:px-8">
+        {/* Section header */}
+        <div className="about-reveal flex items-center gap-6 mb-20">
+          <span className="font-mono text-[11px] text-white/25 tracking-[0.3em]">01</span>
+          <div className="h-px flex-1 bg-white/8" />
+          <span className="font-mono text-[10px] text-white/25 tracking-[0.4em] uppercase">About</span>
+        </div>
 
-              <div className="relative rounded-2xl p-8 aspect-square flex flex-col justify-between overflow-hidden transform transition-transform duration-500 hover:rotate-y-6 hover:rotate-x-6 preserve-3d shadow-2xl bg-[url('/about-visual.jpg')] bg-cover bg-center">
-                {/* Dark Overlay for Readability */}
-                <div className="absolute inset-0 bg-black/50 hover:bg-black/40 transition-colors duration-500" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
+          {/* Image */}
+          <div className="about-reveal relative order-2 lg:order-1">
+            <div className="relative overflow-hidden rounded-3xl aspect-[3/4] max-w-sm mx-auto lg:mx-0">
+              <img
+                src="/vaibhav-profile-pro.png"
+                alt="Vaibhav Ghildiyal"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                <div className="absolute top-0 right-0 p-4 opacity-100 z-10">
-                  <Cpu
-                    size={80}
-                    className="text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]"
-                  />
-                </div>
-
-                <div className="z-10 translate-z-10">
-                  <span className="text-cyan-400 font-bold tracking-wider uppercase text-sm">
-                    Current Focus
-                  </span>
-                  <h3 className="text-3xl font-bold mt-2 mb-4 text-white">
-                    Architecting Intelligent AI Agents
-                  </h3>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 z-10 translate-z-10">
-                  <div className="p-4 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 hover:bg-black/70 transition-colors">
-                    <Globe className="mb-2 text-cyan-400" />
-                    <div className="text-2xl font-bold text-white">RAG</div>
-                    <div className="text-xs text-gray-300">
-                      Retrieval Augmented Generation
-                    </div>
-                  </div>
-                  <div className="p-4 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 hover:bg-black/70 transition-colors">
-                    <Code2 className="mb-2 text-violet-400" />
-                    <div className="text-2xl font-bold text-white">
-                      LangChain
-                    </div>
-                    <div className="text-xs text-gray-300">
-                      AI Workflow Automation
-                    </div>
-                  </div>
-                </div>
+              {/* Floating badge */}
+              <div className="absolute bottom-6 left-6 right-6 p-5 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-1">Based in Noida, India</p>
+                <p className="text-white font-bold text-sm">Available Globally</p>
               </div>
             </div>
+
+            {/* Decorative frame line */}
+            <div className="absolute -top-4 -left-4 w-24 h-24 border-l-2 border-t-2 border-primary/30 rounded-tl-2xl" />
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 border-r-2 border-b-2 border-primary/30 rounded-br-2xl" />
           </div>
 
-          {/* Text Content */}
-          <div className="w-full lg:w-1/2 about-content">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-heading">
-              Engineering the <br />
-              <span className="text-gradient">Future of Work</span>
+          {/* Text */}
+          <div className="order-1 lg:order-2">
+            <h2 className="about-reveal text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-white font-heading leading-tight mb-8">
+              Turning ideas into<br />
+              <span className="text-gradient">engineered reality.</span>
             </h2>
 
-            <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
-              <p>
-                I am currently redefining enterprise efficiency by building
-                next-gen
-                <strong> AI Reporting Agents</strong>. Using{" "}
-                <span className="text-white">
-                  Retrieval-Augmented Generation (RAG)
-                </span>{" "}
-                and <span className="text-white">LangChain</span>, I create
-                intelligent systems that can read, analyze, and generate complex
-                business reports instantly.
+            <div className="about-reveal space-y-5 text-white/50 text-base leading-relaxed mb-12">
+                <p>
+                I'm <span className="text-white font-semibold">Vaibhav Ghildiyal</span> — a Full Stack Developer at <span className="text-white font-semibold">Vigility Technology Private Limited, Noida</span>. I build high-performance web applications and AI-powered systems using modern full-stack technologies.
               </p>
               <p>
-                My work at <strong>Vigility</strong> involves bridging the gap
-                between raw data and actionable insights. I architect full-stack
-                solutions where{" "}
-                <span className="text-cyan-400">Python/FastAPI</span> backends
-                power <span className="text-violet-400">React/Shadcn</span>{" "}
-                frontends, ensuring seamless interaction with advanced AI
-                models.
+                My work spans the entire stack — from React and Next.js on the frontend to Node.js, FastAPI, and <span className="text-white font-semibold">LangChain-powered AI workflows</span> on the backend. I focus on clean, scalable code that ships fast and holds up at scale.
               </p>
               <p>
-                Beyond just code, I focus on system architecture—optimizing
-                token usage, reducing latency by 80%, and ensuring data security
-                in AI workflows.
+                From internal tools to customer-facing products, I move quickly from ideation to production-ready deployments — writing code that serves a clear purpose every time.
               </p>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-4 stats-container">
-              {[
-                "Generative AI",
-                "LangChain",
-                "RAG Architecture",
-                "FastAPI",
-                "React & Shadcn",
-              ].map((skill, i) => (
-                <div
-                  key={i}
-                  className="stat-card px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm font-medium text-white hover:bg-white/10 transition-colors cursor-default hover:border-cyan-500/30"
-                >
-                  {skill}
+            {/* Stats */}
+            <div className="about-reveal grid grid-cols-3 gap-6 mb-12 py-8 border-y border-white/5">
+              {stats.map((s) => (
+                <div key={s.label}>
+                  <p className="text-3xl font-black text-white tracking-tighter mb-1">{s.value}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">{s.label}</p>
                 </div>
               ))}
+            </div>
+
+            <div className="about-reveal">
+              <a
+                href="#contact"
+                className="group inline-flex items-center gap-3 text-white font-bold tracking-tight hover:text-primary transition-colors"
+              >
+                Start a project together
+                <ArrowUpRight
+                  size={18}
+                  className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                />
+              </a>
             </div>
           </div>
         </div>

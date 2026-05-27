@@ -2,8 +2,9 @@ export const portfolioData = {
   personal: {
     name: "Vaibhav Ghildiyal",
     role: "Full Stack Developer",
-    tagline: "Building Digital Experiences",
-    bio: "Innovative Full Stack Developer and Technical Consultant with a proven track record of optimizing UI performance by 80% and delivering scalable software solutions. I specialize in building high-performance, interactive web applications using React, TypeScript, and modern 3D technologies.",
+    company: "Vigility Technology Private Limited",
+    tagline: "Building scalable digital products that drive real outcomes.",
+    bio: "Full Stack Developer at Vigility Technology Private Limited, Noida. I build high-performance web applications and AI-powered systems using modern full-stack technologies — from React and Next.js on the frontend to Node.js, FastAPI, and LangChain on the backend.",
     email: "vaibhavghildiyal2101@gmail.com",
     github: "https://github.com/Vaidiasri",
     linkedin: "https://www.linkedin.com/in/vaibhav-ghildiyal-a2a9b8212/",
@@ -25,11 +26,11 @@ export const portfolioData = {
   projects: [
     {
       title: "AI Lung Disease Detector",
-      description: "Built a deep learning model using MobileNet to classify chest X-rays into four categories (Normal, Pneumonia, Tuberculosis, Others). Applied transfer learning by fine-tuning MobileNet and optimizing hyperparameters. Collected and augmented medical image datasets for robustness. Developed an end-to-end Python/TensorFlow pipeline for automated inference.",
-      tech: ["Python", "TensorFlow", "MobileNet"],
-      link: "https://github.com/Vaidiasri/lungs-detector.git",
-      github: "https://github.com/Vaidiasri/lungs-detector.git",
-      image: "/project-lungs.jpg",
+      description: "A deep learning system delivering 96% accuracy in identifying pulmonary pathologies from X-ray datasets. Engineered for medical-grade precision and high-performance inference.",
+      tech: ["Python", "PyTorch", "FastAPI", "React"],
+      link: "https://lung-disease-detector.onrender.com/",
+      github: "https://github.com/Vaidiasri/Lung-Disease-Detector.git",
+      image: "/neural-sync.png",
     },
     {
       title: "3D Apple MacBook Site",
@@ -50,17 +51,9 @@ export const portfolioData = {
     {
       title: "IQ - Technical Interview Platform",
       description:
-        "A unified, next-gen platform for live technical assessments, solving 'tab-switching' fatigue. Features a sandboxed code engine (JS, Python, Java), real-time video/chat sync via Stream SDK, and a curated bank of 120+ LeetCode-style questions.",
-      tech: [
-        "React 19",
-        "TypeScript",
-        "TailwindCSS v4",
-        "TanStack Query",
-        "Node.js",
-        "MongoDB",
-        "Piston API",
-      ],
-      image: "/project-iq.jpg",
+        "Engineered an automated technical screening suite that leverages AI to assess candidate performance and reduce time-to-hire by 60%.",
+      image: "/neural-sync.png",
+      tech: ["Next.js", "OpenAI", "PostgreSQL", "Tailwind"],
       link: "https://iq-xzvb.onrender.com",
       github: "https://github.com/Vaidiasri/iq",
     },
@@ -75,18 +68,18 @@ export const portfolioData = {
   ],
   experience: [
     {
-      company: "Vigility",
-      role: "AI Solutions Architect & Full Stack Developer",
+      company: "Vigility Technology Private Limited",
+      role: "Full Stack Developer",
       period: "Jun 2025 - Present",
-      description: "Spearheaded the development of a cutting-edge AI Reporting Agent using RAG (Retrieval-Augmented Generation) and LangChain, enabling automated, context-aware business insights. Architected the entire full-stack ecosystem, integrating Shadcn UI for a premium frontend experience and Python/FastAPI for robust backend processing. Achieved an 80% optimization in data retrieval speeds and significantly reduced manual reporting hours.",
-      technologies: ["LangChain", "RAG", "Python", "React", "Shadcn UI", "FastAPI"]
+      description: "Building and maintaining full-stack web applications for enterprise clients. Developed an AI Reporting Agent using RAG and LangChain, achieving 80% faster data retrieval. Architecting scalable ecosystems with React, Next.js, FastAPI, and performance-optimized backend processing.",
+      technologies: ["LangChain", "RAG", "Python", "React", "Next.js", "FastAPI"]
     },
     {
-      company: "YugYatra Retail",
-      role: "Software Engineer Intern",
+      company: "Vigility Technology Private Limited",
+      role: "Full Stack Developer — Client Projects",
       period: "Apr 2025 - Jun 2025",
-      description: "Designed and delivered scalable client-specific software solutions, reducing deployment turnaround time by 25%. Successfully implemented over 10 customized functionalities to meet strict deadlines. Optimized project workflows and fixed critical issues, boosting overall system reliability by 15%.",
-      technologies: ["React", "Node.js", "MongoDB", "Redux"]
+      description: "Designed and delivered scalable client-specific software solutions, reducing deployment turnaround time by 25%. Implemented customised functionalities to meet enterprise requirements, optimised project workflows, and fixed critical issues that boosted system reliability.",
+      technologies: ["React", "Node.js", "MongoDB", "TypeScript"]
     },
   ],
   contact: {
